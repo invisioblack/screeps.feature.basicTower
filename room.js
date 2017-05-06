@@ -1,6 +1,4 @@
 
-// urgent repair when hits below
-const LIMIT_URGENT_REPAIRING = 750;
 const DECAY_AMOUNT = {
     'rampart': RAMPART_DECAY_AMOUNT, // 300
     'road': ROAD_DECAY_AMOUNT, // 100
@@ -11,6 +9,9 @@ let mod = {};
 module.exports = mod;
 
 mod.extend = function(){
+    const LIMIT_URGENT_REPAIRING = context.settings.LIMIT_URGENT_REPAIRING;
+    const PLAYER_WHITELIST = context.settings.PLAYER_WHITELIST;    
+
     Object.defineProperties(Room.prototype, {
         'hostiles': {
             configurable: true,
@@ -18,7 +19,7 @@ mod.extend = function(){
                 if( this._hostiles === undefined || this._hostilesSet != Game.time ){
                     this._hostilesSet = Game.time;
                     let notWhitelisted = (creep) => 
-                        !(global.PLAYER_WHITELIST.some((player) => 
+                        !(PLAYER_WHITELIST.some((player) => 
                             player.toLowerCase() === creep.owner.username.toLowerCase()
                         ));
                     this._hostiles = this.find(FIND_HOSTILE_CREEPS, { filter : notWhitelisted });

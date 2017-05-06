@@ -1,3 +1,4 @@
+
 let mod = {};
 module.exports = mod;
 
@@ -35,11 +36,9 @@ mod.extend = function(){
         if( room.hostiles != null && room.hostiles.length !== 0 ){
             const maxRange = 30 - (towerCount*3);
             const inRange = creep => that.pos.getRangeTo(creep) < maxRange;
-            let hostilesInRange = room.hostiles.filter(inRange);
+            const hostilesInRange = room.hostiles.filter(inRange);
             if( hostilesInRange.length !== 0 ){
-                let closestHostile = this.pos.findClosestByRange(hostilesInRange);
-                if( closestHostile != null ) 
-                    this.attack(closestHostile);
+                this.attack( this.pos.findClosestByRange(hostilesInRange) );
             }
         }   
     };    
