@@ -32,8 +32,9 @@ mod.extend = function(){
                 if( this._towerHealable === undefined || this._towerHealableSet != Game.time ){
                     this._towerHealableSet = Game.time;
                     const myCreeps = this.find(FIND_MY_CREEPS);
-                    const isInjured = creep => creep.hits < creep.hitsMax && (creep.towers === undefined || creep.towers.length === 0) && !creep.hasActiveBodyparts(HEAL);
-                    this._towerHealable = myCreeps.filter(creep => !creep.hasActiveBodyparts(HEAL));
+                    const isActiveHealPart = part => ( part.type === HEAL && part.hits !== 0 );
+                    const isInjured = creep => creep.hits < creep.hitsMax && (creep.towers === undefined || creep.towers.length === 0) && !this.body.some(isActiveHealPart);
+                    this._towerHealable = myCreeps.filter(isInjured);
                 }
                 return this._towerHealable;
             }
@@ -43,9 +44,9 @@ mod.extend = function(){
             get: function() {
                 if( this._urgentRepairable === undefined || this._urgentRepairableSet != Game.time ){
                     this._urgentRepairableSet = Game.time;
-                    const structures = this.room.find(FIND_STRUCTURES);
+                    const structures = this.find(FIND_STRUCTURES);
                     const isUrgent = structure => (
-                        structure.hits < (LIMIT_URGENT_REPAIRING + (DECAY_AMOUNT[site.structureType] || 0))
+                        structure.hits < (LIMIT_URGENT_REPAIRING + (DECAY_AMOUNT[structure.structureType] || 0))
                     );
                     this._urgentRepairable = structures.filter(isUrgent);
                 }
