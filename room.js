@@ -53,6 +53,6 @@ mod.extend = function(){
                 }
                 return this._urgentRepairable;
             }
-        },
+        }
     });
 };
